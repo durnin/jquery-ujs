@@ -244,6 +244,8 @@
       rails.formElements(form, rails.disableSelector).each(function() {
         rails.disableFormElement($(this));
       });
+      // Slight timeout so that the submit button gets properly serialized
+      setTimeout(function(){ rails.disableFormElementsDisableProp(form); }, 13);
     },
 
     disableFormElement: function(element) {
@@ -257,14 +259,19 @@
         element[method](replacement);
       }
 
-      element.prop('disabled', true);
-      element.data('ujs:disabled', true);
     },
 
-    /* Re-enables disabled form elements:
-      - Replaces element text with cached value from 'ujs:enable-with' data store (created in `disableFormElements`)
-      - Sets disabled property to false
-    */
+    disableFormElementsDisableProp: function (form) {
+      rails.formElements(form, rails.disableSelector).each(function () {
+        $(this).prop('disabled', true);
+        $(this).data('ujs:disabled', true);
+      });
+    },
+
+  /* Re-enables disabled form elements:
+    - Replaces element text with cached value from 'ujs:enable-with' data store (created in `disableFormElements`)
+    - Sets disabled property to false
+  */
     enableFormElements: function(form) {
       rails.formElements(form, rails.enableSelector).each(function() {
         rails.enableFormElement($(this));
@@ -513,8 +520,7 @@
         return false;
 
       } else {
-        // Slight timeout so that the submit button gets properly serialized
-        setTimeout(function(){ rails.disableFormElements(form); }, 13);
+        rails.disableFormElements(form);
       }
     });
 
