@@ -259,6 +259,8 @@
         element[method](replacement);
       }
 
+      // Enhances visual experience when disabled class is styled
+      element.addClass('disabled');
     },
 
     disableFormElementsDisableProp: function (form) {
